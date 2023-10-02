@@ -1,5 +1,15 @@
 package com.example.ble_beacon
 
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
+import android.bluetooth.le.AdvertiseCallback
+import android.bluetooth.le.AdvertiseSettings
+import android.bluetooth.le.BluetoothLeAdvertiser
+
+import android.content.Context
+import android.os.ParcelUuid
+import android.widget.Toast
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,6 +35,56 @@ class MainActivity : ComponentActivity() {
                     Greeting("Android")
                 }
             }
+        }
+    }
+
+    private fun sendBeacon() {
+        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val bluetoothAdapter = bluetoothManager.adapter
+
+        // 檢查藍牙是否可用
+        if (bluetoothAdapter == null) {
+            Toast.makeText(this, "藍牙不可用", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // 檢查藍牙是否已經開啟
+        if (!bluetoothAdapter.isEnabled) {
+            // 如果藍牙未開啟，可以啟動藍牙
+            bluetoothAdapter.enable()
+        }
+
+        // 創建 Beacon 數據
+        val settings = AdvertiseSettings.Builder()
+            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+            .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+            .build()
+
+        val data = AdvertiseData.Builder()
+            .setIncludeDeviceName(true)
+            .setIncludeTxPowerLevel(true)
+            .addServiceUuid(ParcelUuid(YOUR_UUID)) // 替換成您的 Beacon UUID
+            .build()
+
+        val bluetoothLeAdvertiser: BluetoothLeAdvertiser? = bluetoothAdapter.bluetoothLeAdvertiser
+        if (bluetoothLeAdvertiser == null) {
+            Toast.makeText(this, "不支持 Beacon", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // 開始廣告 Beacon 數據
+        bluetoothLeAdvertiser.startAdvertising(settings, data, advertiseCallback)
+    }
+
+    private val advertiseCallback = object : AdvertiseCallback() {
+        override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
+            super.onStartSuccess(settingsInEffect)
+            Toast.makeText(this@MainActivity, "Beacon 廣告已開始", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onStartFailure(errorCode: Int) {
+            super.onStartFailure(errorCode)
+            Toast.makeText(this@MainActivity, "Beacon 廣告開始失敗，錯誤碼: $errorCode", Toast.LENGTH_SHORT).show()
         }
     }
 }
