@@ -1,9 +1,11 @@
 package com.example.ble_beacon
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.AdvertiseCallback
+import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.bluetooth.le.BluetoothLeAdvertiser
 
@@ -11,6 +13,7 @@ import android.content.Context
 import android.os.ParcelUuid
 import android.widget.Toast
 import android.os.Bundle
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +23,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+
 import com.example.ble_beacon.ui.theme.BLEBeaconTheme
+import java.util.UUID
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +43,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun sendBeacon() {
+    @SuppressLint("MissingPermission")
+    private fun sendBeacon(uuid: String) {
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
 
@@ -54,6 +60,14 @@ class MainActivity : ComponentActivity() {
             bluetoothAdapter.enable()
         }
 
+        // 將字串轉換為 UUID
+        val beaconUUID = try {
+            UUID.fromString(uuid)
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(this, "無效的 UUID 字串", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         // 創建 Beacon 數據
         val settings = AdvertiseSettings.Builder()
             .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
@@ -63,7 +77,7 @@ class MainActivity : ComponentActivity() {
         val data = AdvertiseData.Builder()
             .setIncludeDeviceName(true)
             .setIncludeTxPowerLevel(true)
-            .addServiceUuid(ParcelUuid(YOUR_UUID)) // 替換成您的 Beacon UUID
+            .addServiceUuid(ParcelUuid(beaconUUID)) // 替換成您的 Beacon UUID
             .build()
 
         val bluetoothLeAdvertiser: BluetoothLeAdvertiser? = bluetoothAdapter.bluetoothLeAdvertiser
