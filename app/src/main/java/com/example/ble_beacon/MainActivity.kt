@@ -1,21 +1,21 @@
 package com.example.ble_beacon
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.bluetooth.le.BluetoothLeAdvertiser
-
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.os.ParcelUuid
 import android.widget.Toast
-import android.os.Bundle
-
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -23,11 +23,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-
 import com.example.ble_beacon.ui.theme.BLEBeaconTheme
 import java.util.UUID
 
+
 class MainActivity : ComponentActivity() {
+    lateinit var bManager: BluetoothManager
+    lateinit var bAdapter: BluetoothAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -40,6 +43,9 @@ class MainActivity : ComponentActivity() {
                     Greeting("Android")
                 }
             }
+
+            bManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+            bAdapter = bManager.adapter
         }
     }
 
@@ -47,6 +53,15 @@ class MainActivity : ComponentActivity() {
     private fun sendBeacon(uuid: String) {
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
+
+        val registerForResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                // Handle the Intent
+            }
+        }
 
         // 檢查藍牙是否可用
         if (bluetoothAdapter == null) {
@@ -57,7 +72,8 @@ class MainActivity : ComponentActivity() {
         // 檢查藍牙是否已經開啟
         if (!bluetoothAdapter.isEnabled) {
             // 如果藍牙未開啟，可以啟動藍牙
-            bluetoothAdapter.enable()
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            registerForResult.launch(enableBtIntent)
         }
 
         // 將字串轉換為 UUID
