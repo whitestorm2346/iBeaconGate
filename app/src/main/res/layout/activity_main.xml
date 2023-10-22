@@ -37,7 +37,14 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/scanBeaconBtn"
+        android:minWidth="200dp"
+        android:text="Scan Beacon" />
+
+    <Button
         android:id="@+id/sendBeaconBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:minWidth="200dp"
         android:text="Send Beacon" />
 

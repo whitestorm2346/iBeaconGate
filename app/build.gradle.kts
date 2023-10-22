@@ -66,4 +66,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // libraries
+    implementation("me.dm7.barcodescanner:zxing:1.9.13")
+    implementation("com.karumi:dexter:6.2.3")
+    implementation("com.budiyev.android:code-scanner:2.1.0")
 }
