@@ -1,55 +1,87 @@
 package com.example.ble_beacon
 
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import com.budiyev.android.codescanner.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import com.example.ble_beacon.databinding.ActivityMainBinding
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
+
 
 class ScanQRcode : ComponentActivity() {
-    private lateinit var codeScanner: CodeScanner
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()){
+            isGranted: Boolean ->
+            if (isGranted){
+                showCamera()
+            }
+            else{
+
+            }
+        }
+
+    private val scanLauncher =
+        registerForActivityResult(ScanContract()){
+            result: ScanIntentResult -> {
+                if(result.contents == null){
+                    Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    setResult(result.contents)
+                }
+            }
+        }
+
+    private lateinit var binding: ActivityMainBinding
+
+    private fun setResult(string: String){
+        binding.textResult.text = string
+    }
+    private fun showCamera(){
+        val options = ScanOptions()
+
+        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+        options.setPrompt("Scan QR code")
+        options.setCameraId(0)
+        options.setBeepEnabled(false)
+        options.setBarcodeImageEnabled(true)
+        options.setOrientationLocked(false)
+
+        scanLauncher.launch(options)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.scan_beacon.xml)
+        initBinding()
+        initViews()
+    }
 
-        val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
-
-        codeScanner = CodeScanner(this, scannerView)
-
-        // Parameters (default values)
-        codeScanner.camera = CodeScanner.CAMERA_BACK // or CAMERA_FRONT or specific camera id
-        codeScanner.formats = CodeScanner.ALL_FORMATS // list of type BarcodeFormat,
-        // ex. listOf(BarcodeFormat.QR_CODE)
-        codeScanner.autoFocusMode = AutoFocusMode.SAFE // or CONTINUOUS
-        codeScanner.scanMode = ScanMode.SINGLE // or CONTINUOUS or PREVIEW
-        codeScanner.isAutoFocusEnabled = true // Whether to enable auto focus or not
-        codeScanner.isFlashEnabled = false // Whether to enable flash or not
-
-        // Callbacks
-        codeScanner.decodeCallback = DecodeCallback {
-            runOnUiThread {
-                Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
-            }
-        }
-        codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
-            runOnUiThread {
-                Toast.makeText(this, "Camera initialization error: ${it.message}",
-                    Toast.LENGTH_LONG).show()
-            }
-        }
-
-        scannerView.setOnClickListener {
-            codeScanner.startPreview()
+    private fun initViews() {
+        binding.root.setOnClickListener {
+            checkPermissionCamera(this)
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        codeScanner.startPreview()
+    private fun checkPermissionCamera(context: Context) {
+        if(ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_GRANTED){
+
+        }
+        else if(shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)){
+            Toast.makeText(context, "CAMERA permission required", Toast.LENGTH_SHORT)
+        }
+        else{
+            requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+        }
     }
 
-    override fun onPause() {
-        codeScanner.releaseResources()
-        super.onPause()
+    private fun initBinding() {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }
