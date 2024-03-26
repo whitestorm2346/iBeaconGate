@@ -13,6 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "BlueToothGate"
+rootProject.name = "BluetoothGate"
 include(":app")
- 
