@@ -3,7 +3,6 @@ package com.example.bluetoothgate
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.example.bluetoothgate.databinding.ActivityMainBinding
-import com.example.bluetoothgate.BluetoothFunctions
 
 class MainActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -14,5 +13,7 @@ class MainActivity : ComponentActivity() {
         setContentView(binding.root)
 
         binding.mainTitle.text = "change in main activity"
+
+
     }
 }
