@@ -2,8 +2,6 @@ package com.example.bluetoothgate
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.zxing.integration.android.IntentIntegrator
@@ -27,7 +25,7 @@ class QRCodeScanner(private val activity: AppCompatActivity) {
         // 初始化 IntentIntegrator，並啟動 QR code scanner
         IntentIntegrator(activity).apply {
             setBeepEnabled(false)
-            setCaptureActivity(ScanActivity::class.java)
+            setCaptureActivity(QRScanActivity::class.java)
             initiateScan()
         }
     }
