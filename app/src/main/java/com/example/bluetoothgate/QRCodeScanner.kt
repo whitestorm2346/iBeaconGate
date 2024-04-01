@@ -2,14 +2,16 @@ package com.example.bluetoothgate
 
 import android.Manifest
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
 
-class QRCodeScanner(private val activity: AppCompatActivity) {
+class QRCodeScanner(private val activity: MainActivity) {
+    private var isScanning = false
 
     fun startScanner() {
+        if (isScanning) return
+
         if (ActivityCompat.checkSelfPermission(
                 activity,
                 Manifest.permission.CAMERA
@@ -29,6 +31,17 @@ class QRCodeScanner(private val activity: AppCompatActivity) {
             captureActivity = CaptureActivity::class.java
             initiateScan()
         }
+
+        isScanning = true
+    }
+
+    fun stopScanner() {
+        if (!isScanning) return
+
+        // 在这里执行停止扫描的操作
+        // 例如，停止 ZXing 扫描器等
+
+        isScanning = false
     }
 
     companion object {

@@ -19,12 +19,10 @@ import java.util.UUID
 
 class BluetoothFunctions(private val context: Context) {
 
-    // 檢查是否支援藍牙
     fun isBluetoothSupported(): Boolean {
         return context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)
     }
 
-    // 初始化藍牙權限
     fun initializeBluetoothPermissions() {
         // 在 Android 6.0 及以上版本中，需要在運行時檢查並申請藍牙相關權限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -32,14 +30,12 @@ class BluetoothFunctions(private val context: Context) {
         }
     }
 
-    // 檢查藍牙是否已啟用
     fun isBluetoothEnabled(): Boolean {
         val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
         return bluetoothAdapter != null && bluetoothAdapter.isEnabled
     }
 
-    // 啟用藍牙
     fun enableBluetooth() {
         val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
@@ -66,7 +62,6 @@ class BluetoothFunctions(private val context: Context) {
         }
     }
 
-    // 關閉藍牙
     fun disableBluetooth() {
         val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
