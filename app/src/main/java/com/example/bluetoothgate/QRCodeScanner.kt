@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.zxing.integration.android.IntentIntegrator
+import com.journeyapps.barcodescanner.CaptureActivity
 
 class QRCodeScanner(private val activity: AppCompatActivity) {
 
@@ -25,7 +26,7 @@ class QRCodeScanner(private val activity: AppCompatActivity) {
         // 初始化 IntentIntegrator，並啟動 QR code scanner
         IntentIntegrator(activity).apply {
             setBeepEnabled(false)
-            setCaptureActivity(QRScanActivity::class.java)
+            captureActivity = CaptureActivity::class.java
             initiateScan()
         }
     }
