@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">BluetoothGate</string>
+    <string name="app_name">1129</string>
+    <string name="Loading">Loading…</string>
+    <string name="name">姓名</string>
+    <string name="gender">性別</string>
+    <string name="id_num">身分證字號</string>
+    <string name="phone_num">手機號碼</string>
+    <string name="email">E-mail</string>
+    <string name="password">密碼</string>
+    <string name="login">登入</string>
+    <string name="signup">註冊</string>
+    <string name="visitor">VISITOR</string>
+    <string name="personal_if">個人資料</string>
+    <string name="qrcode">掃描Qr Code</string>
+    <string name="build_customer_if">建立用戶資料</string>
 </resources>

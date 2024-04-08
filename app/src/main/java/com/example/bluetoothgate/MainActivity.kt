@@ -2,7 +2,9 @@ package com.example.bluetoothgate
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import com.example.bluetoothgate.bluetooth.BluetoothFunctions
 import com.example.bluetoothgate.databinding.ActivityMainBinding
+import com.example.bluetoothgate.qrscanner.QRCodeScanner
 
 class MainActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding

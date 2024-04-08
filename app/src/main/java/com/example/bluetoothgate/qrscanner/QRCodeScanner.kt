@@ -1,8 +1,9 @@
-package com.example.bluetoothgate
+package com.example.bluetoothgate.qrscanner
 
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
+import com.example.bluetoothgate.MainActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
 

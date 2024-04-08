@@ -1,4 +1,4 @@
-package com.example.bluetoothgate
+package com.example.bluetoothgate.bluetooth
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
