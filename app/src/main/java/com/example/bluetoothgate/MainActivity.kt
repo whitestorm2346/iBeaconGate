@@ -10,6 +10,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var qrCodeScanner: QRCodeScanner
     private lateinit var bluetoothFunctions: BluetoothFunctions
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
