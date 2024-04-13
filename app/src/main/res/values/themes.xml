@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.BluetoothGate" parent="android:Theme.Material.Light.NoActionBar">
-<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
-<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-<!--        <item name="colorAccent">@color/colorAccent</item>-->
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
-    </style>
+    <style name="Theme.BluetoothGate" parent="Theme.AppCompat.NoActionBar">
+<!--        <item name="colorPrimary">@color/primary</item>-->
+<!--        <item name="colorPrimaryDark">@color/primaryDark</item>-->
+<!--        <item name="colorAccent">@color/secondary</item>-->
 
+<!--        <item name="android:navigationBarColor">@color/secondaryLight</item>-->
+<!--        <item name="android:statusBarColor" >@color/secondaryLight</item>-->
+    </style>
 </resources>
