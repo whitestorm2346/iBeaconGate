@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frame_layout, fragment)
         fragmentTransaction.commit()
     }
 
@@ -24,14 +25,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         replaceFragment(Profile())
 
-        binding.bottomNavigationView.setOnItemSelectedListener {
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.profile -> replaceFragment(Profile())
                 R.id.qr_code_scanner -> replaceFragment(Scanner())
                 R.id.setting -> replaceFragment(Setting())
                 else -> {}
             }
-
             true
         }
 
@@ -39,27 +39,27 @@ class MainActivity : AppCompatActivity() {
         bluetoothFunctions = BluetoothFunctions(this)
     }
 
-    override fun onStart() {
-        super.onStart()
-        // 在 onStart 方法中啟動 Bluetooth 功能
-        bluetoothFunctions.enableBluetooth()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // 在 onResume 方法中啟動 QR code scanner
-        qrCodeScanner.startScanner()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // 在 onPause 方法中停止 QR code scanner
-        qrCodeScanner.stopScanner()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // 在 onStop 方法中關閉 Bluetooth 功能
-        bluetoothFunctions.disableBluetooth()
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        // 在 onStart 方法中啟動 Bluetooth 功能
+//        bluetoothFunctions.enableBluetooth()
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        // 在 onResume 方法中啟動 QR code scanner
+//        qrCodeScanner.startScanner()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        // 在 onPause 方法中停止 QR code scanner
+//        qrCodeScanner.stopScanner()
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        // 在 onStop 方法中關閉 Bluetooth 功能
+//        bluetoothFunctions.disableBluetooth()
+//    }
 }
