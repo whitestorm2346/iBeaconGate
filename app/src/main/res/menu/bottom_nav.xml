@@ -8,8 +8,8 @@
         android:id="@+id/qr_code_scanner"
         android:icon="@drawable/baseline_qr_code_scanner_24"
         android:title="@string/qrcodescanner" />
-    <item
-        android:id="@+id/setting"
-        android:icon="@drawable/baseline_settings_24"
-        android:title="@string/setting" />
+<!--    <item-->
+<!--        android:id="@+id/setting"-->
+<!--        android:icon="@drawable/baseline_settings_24"-->
+<!--        android:title="@string/setting" />-->
 </menu>

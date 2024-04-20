@@ -5,11 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.bluetoothgate.bluetooth.BluetoothFunctions
 import com.example.bluetoothgate.databinding.ActivityMainBinding
-import com.example.bluetoothgate.qrscanner.QRCodeScanner
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var qrCodeScanner: QRCodeScanner
     private lateinit var bluetoothFunctions: BluetoothFunctions
 
     private fun replaceFragment(fragment: Fragment) {
@@ -29,13 +27,11 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.profile -> replaceFragment(Profile())
                 R.id.qr_code_scanner -> replaceFragment(Scanner())
-                R.id.setting -> replaceFragment(Setting())
                 else -> {}
             }
             true
         }
 
-        qrCodeScanner = QRCodeScanner(this@MainActivity)
         bluetoothFunctions = BluetoothFunctions(this)
     }
 

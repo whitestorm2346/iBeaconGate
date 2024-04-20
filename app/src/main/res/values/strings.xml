@@ -16,4 +16,6 @@
     <string name="profile">Profile</string>
     <string name="qrcodescanner">QR Code Scanner</string>
     <string name="setting">Setting</string>
+    <string name="save">儲存</string>
+    <string name="entry_reason">事由</string>
 </resources>
