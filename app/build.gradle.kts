@@ -57,8 +57,8 @@ repositories {
 
 dependencies {
 
+    implementation("com.github.yuriy-budiyev:code-scanner:2.3.2")
     implementation("com.google.android.material:material:1.1.0")
-
     implementation("com.journeyapps:zxing-android-embedded:4.2.0")
     implementation("com.google.zxing:core:3.4.0")
     implementation("androidx.core:core-ktx:1.12.0")

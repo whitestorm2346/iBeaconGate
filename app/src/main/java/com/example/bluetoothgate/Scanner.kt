@@ -1,15 +1,17 @@
 package com.example.bluetoothgate
 
-import android.content.Context
+import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.bluetoothgate.qrscanner.QRCodeScanner
+import com.budiyev.android.codescanner.CodeScanner
+import com.budiyev.android.codescanner.CodeScannerView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,36 +24,74 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class Scanner : Fragment() {
-    private lateinit var qr_code_scanner: QRCodeScanner;
 
-    private fun showCamera(){
+    private lateinit var codeScanner: CodeScanner;
+    private var lastScannedResult: String? = null
 
-    }
-    private fun checkPermissionCamera(context: Context){
-        if(ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            showCamera()
-        }
-        else if(shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
-            Toast.makeText(context, "CAMERA permission required", Toast.LENGTH_SHORT).show();
-        }
-        else {
-//            requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            // 用户授予了权限
+            // 执行其他操作...
+        } else {
+            // 用户拒绝了权限
+            // 执行其他操作...
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        qr_code_scanner = QRCodeScanner(this@Scanner)
-//        checkPermissionCamera(this@Scanner)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_scanner, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_scanner, container, false)
+
+        permissionCheck()
+
+        val codeScannerView = rootView.findViewById<CodeScannerView>(R.id.zxing_barcode_scanner)
+
+        codeScanner = CodeScanner(requireContext(), codeScannerView)
+        codeScanner.setDecodeCallback {
+            result -> val barcodeScanned = result.text
+            lastScannedResult = barcodeScanned
+
+            requireActivity().runOnUiThread{
+                Toast.makeText(requireContext(), barcodeScanned, Toast.LENGTH_SHORT).show()
+                codeScanner.startPreview()
+            }
+        }
+
+        codeScannerView.setOnClickListener{
+            codeScanner.startPreview()
+        }
+
+        return rootView
+    }
+
+
+    private fun permissionCheck() {
+        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            requestCameraPermission()
+        }
+    }
+
+    private fun requestCameraPermission() {
+        requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        codeScanner.startPreview()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        codeScanner.stopPreview()
     }
 
     companion object {
