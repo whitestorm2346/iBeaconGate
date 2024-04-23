@@ -18,4 +18,5 @@
     <string name="setting">Setting</string>
     <string name="save">儲存</string>
     <string name="entry_reason">事由</string>
+    <string name="beacon_advertising">藍牙信標廣播中...</string>
 </resources>

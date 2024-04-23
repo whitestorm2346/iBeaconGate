@@ -1,6 +1,7 @@
 package com.example.bluetoothgate
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,7 +27,6 @@ private const val ARG_PARAM2 = "param2"
 class Scanner : Fragment() {
 
     private lateinit var codeScanner: CodeScanner;
-    private var lastScannedResult: String? = null
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
@@ -57,11 +57,9 @@ class Scanner : Fragment() {
         codeScanner = CodeScanner(requireContext(), codeScannerView)
         codeScanner.setDecodeCallback {
             result -> val barcodeScanned = result.text
-            lastScannedResult = barcodeScanned
 
             requireActivity().runOnUiThread{
-                Toast.makeText(requireContext(), barcodeScanned, Toast.LENGTH_SHORT).show()
-                codeScanner.startPreview()
+                handleScanResult(barcodeScanned)
             }
         }
 
@@ -70,6 +68,19 @@ class Scanner : Fragment() {
         }
 
         return rootView
+    }
+
+    private fun handleScanResult(result: String) {
+
+        Toast.makeText(requireContext(), result, Toast.LENGTH_SHORT).show()
+
+        // 创建 Intent
+        val intent = Intent(requireContext(), BLEBeaconAdvertise::class.java)
+        intent.putExtra("qrCodeResult", result) // 将扫描结果作为参数传递
+        startActivity(intent)
+
+        // 停止相机预览（如果需要）
+        codeScanner.stopPreview()
     }
 
 
