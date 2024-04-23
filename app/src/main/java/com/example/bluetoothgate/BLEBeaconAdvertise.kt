@@ -33,8 +33,12 @@ class BLEBeaconAdvertise : AppCompatActivity() {
         }
 
         qrCodeResult = intent.getStringExtra("qrCodeResult").toString()
+
+        binding.textView.text = qrCodeResult
+
         bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothAdapter = bluetoothManager.adapter
+        bluetoothLeAdvertiser = bluetoothAdapter.bluetoothLeAdvertiser
 
         val qrCodeBytes = qrCodeResult.toByteArray(Charsets.UTF_8) // 將 QR 碼數據轉換為字節碼
 
@@ -60,10 +64,9 @@ class BLEBeaconAdvertise : AppCompatActivity() {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            Toast.makeText(this, "Without proper bluetooth support!", Toast.LENGTH_LONG).show()
-            return
+            Toast.makeText(this, "Bluetooth Advertise not support", Toast.LENGTH_SHORT).show()
+            return 
         }
-
         bluetoothLeAdvertiser.startAdvertising(settings, data, null)
     }
 
