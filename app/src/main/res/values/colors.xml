@@ -3,11 +3,11 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
 
-    <color name="primary">#37C6FF</color>
+    <color name="primary">#2F3032</color>
     <color name="primaryLight">#C9F7FF</color>
-    <color name="primaryDark">#0058AB</color>
+    <color name="primaryDark">#585B5E</color>
 
-    <color name="secondary">#9370C8</color>
+    <color name="secondary">#C2C5C6</color>
     <color name="secondaryLight">#FBEAFF</color>
     <color name="secondaryDark">#28115D</color>
 </resources>
