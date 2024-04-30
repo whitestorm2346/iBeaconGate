@@ -3,20 +3,35 @@ package com.example.bluetoothgate
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
+import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.os.ParcelUuid
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.bluetoothgate.databinding.ActivityBleBeaconAdvertiseBinding
+import java.util.UUID
 
 class BLEBeaconAdvertise : AppCompatActivity() {
-    private val TAG = "BLEBeaconAdvertise"
+    private val TAG = "BeaconAdvertise"
     private val REQUEST_BLUETOOTH_PERMISSION = 123
+    private val advertisingCallback = object : AdvertiseCallback() {
+        override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
+            super.onStartSuccess(settingsInEffect)
+        }
+
+        override fun onStartFailure(errorCode: Int) {
+            Log.e(TAG, "Advertising onStartFailure: $errorCode")
+            super.onStartFailure(errorCode)
+        }
+    }
 
     private lateinit var binding: ActivityBleBeaconAdvertiseBinding
     private lateinit var qrCodeResult: String
@@ -31,6 +46,25 @@ class BLEBeaconAdvertise : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.imageButton.setOnClickListener {
+            Log.d(TAG, "Stop Advertising")
+
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_ADVERTISE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+            }
+            bluetoothLeAdvertiser.stopAdvertising(advertisingCallback)
+
+            Toast.makeText(this, "ble stop advertising", Toast.LENGTH_SHORT).show()
+
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
@@ -47,42 +81,50 @@ class BLEBeaconAdvertise : AppCompatActivity() {
             .setConnectable(false) // 不允許連接
             .build()
 
-        val qrCodeBytes = qrCodeResult.toByteArray(Charsets.UTF_8)
+        val pUuid = ParcelUuid(UUID.fromString(qrCodeResult))
+
+        Log.d(TAG, "UUID: $pUuid")
 
         val data = AdvertiseData.Builder()
-            .addManufacturerData(0, qrCodeBytes) // 添加 QR 碼數據
+            .setIncludeDeviceName(false)
+            .setIncludeTxPowerLevel(true)
+            .addServiceUuid(pUuid)
             .build()
 
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.BLUETOOTH_ADVERTISE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            Log.d(TAG, "bluetooth advertise permission is not granted")
+        Log.d(TAG, "Data: $data")
 
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.BLUETOOTH_ADVERTISE),
-                REQUEST_BLUETOOTH_PERMISSION
-            )
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Log.d(TAG, "SDK Version Checking")
 
-        binding.textView.setText(R.string.beacon_advertising)
-        binding.imageView.setImageResource(R.drawable.baseline_bluetooth_audio_24)
-        bluetoothLeAdvertiser.startAdvertising(settings, data, null)
-    }
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_ADVERTISE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.d(TAG, "Requesting Permission: Bluetooth Advertise")
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_BLUETOOTH_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 使用者已授予藍芽權限，可以開始執行藍芽操作
-            } else {
-                // 使用者拒絕了藍芽權限，您可以處理相應的情況
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.BLUETOOTH_ADVERTISE),
+                    REQUEST_BLUETOOTH_PERMISSION
+                )
+
+                bluetoothLeAdvertiser.startAdvertising(settings, data, advertisingCallback)
+
+                Toast.makeText(this, "ble start advertising", Toast.LENGTH_SHORT).show()
+
+                binding.textView.setText(R.string.beacon_advertising)
+                binding.imageView.setImageResource(R.drawable.baseline_bluetooth_audio_24)
+            }
+            else {
+                Log.d(TAG, "Already Required Permission")
+
+                bluetoothLeAdvertiser.startAdvertising(settings, data, advertisingCallback)
+
+                Toast.makeText(this, "ble start advertising", Toast.LENGTH_SHORT).show()
+
+                binding.textView.setText(R.string.beacon_advertising)
+                binding.imageView.setImageResource(R.drawable.baseline_bluetooth_audio_24)
             }
         }
     }
@@ -105,6 +147,10 @@ class BLEBeaconAdvertise : AppCompatActivity() {
             return
         }
 
-        bluetoothLeAdvertiser.stopAdvertising(null)
+        Log.d(TAG, "Stop Advertising")
+
+        bluetoothLeAdvertiser.stopAdvertising(advertisingCallback)
+
+        Toast.makeText(this, "ble stop advertising", Toast.LENGTH_SHORT).show()
     }
 }
