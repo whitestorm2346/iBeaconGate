@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bluetooth Gate</string>
+    <string name="app_name">iBeacon Gate</string>
     <string name="Loading">Loading…</string>
     <string name="name">姓名</string>
     <string name="gender">性別</string>
@@ -18,6 +18,6 @@
     <string name="setting">Setting</string>
     <string name="save">儲存</string>
     <string name="entry_reason">事由</string>
-    <string name="beacon_advertising">藍牙信標廣播中...</string>
-    <string name="bluetooth_not_working">藍牙廣播功能異常</string>
+    <string name="beacon_advertising">藍牙信標廣播中…</string>
+    <string name="beacon_advertise_not_working">藍牙信標廣播異常</string>
 </resources>

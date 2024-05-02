@@ -1,30 +1,36 @@
 package com.example.bluetoothgate
 
 import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
 import android.bluetooth.le.AdvertiseCallback
-import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
-import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.ParcelUuid
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.bluetoothgate.databinding.ActivityBleBeaconAdvertiseBinding
-import java.util.UUID
+import org.altbeacon.beacon.Beacon
+import org.altbeacon.beacon.BeaconParser
+import org.altbeacon.beacon.BeaconTransmitter
+
 
 class BLEBeaconAdvertise : AppCompatActivity() {
-    private val TAG = "BeaconAdvertise"
-    private val REQUEST_BLUETOOTH_PERMISSION = 123
+
+    private lateinit var binding: ActivityBleBeaconAdvertiseBinding
+    private lateinit var qrCodeResult: String
+
+    private lateinit var beacon: Beacon
+    private lateinit var beaconParser: BeaconParser
+    private lateinit var beaconTransmitter: BeaconTransmitter
+
     private val advertisingCallback = object : AdvertiseCallback() {
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
             super.onStartSuccess(settingsInEffect)
+
+            Log.d(Companion.TAG, "iBeacon Start Advertising")
         }
 
         override fun onStartFailure(errorCode: Int) {
@@ -33,37 +39,18 @@ class BLEBeaconAdvertise : AppCompatActivity() {
         }
     }
 
-    private lateinit var binding: ActivityBleBeaconAdvertiseBinding
-    private lateinit var qrCodeResult: String
-
-    private lateinit var bluetoothManager: BluetoothManager
-    private lateinit var bluetoothAdapter: BluetoothAdapter
-    private lateinit var bluetoothLeAdvertiser: BluetoothLeAdvertiser
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBleBeaconAdvertiseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.imageButton.setOnClickListener {
-            Log.d(TAG, "Stop Advertising")
+            if(beaconTransmitter.isStarted){
+                beaconTransmitter.stopAdvertising()
+                Log.d(Companion.TAG, "iBeacon Stop Advertising")
 
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.BLUETOOTH_ADVERTISE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+                Toast.makeText(this, "iBeacon stop advertising", Toast.LENGTH_SHORT).show()
             }
-            bluetoothLeAdvertiser.stopAdvertising(advertisingCallback)
-
-            Toast.makeText(this, "ble stop advertising", Toast.LENGTH_SHORT).show()
 
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -71,27 +58,21 @@ class BLEBeaconAdvertise : AppCompatActivity() {
 
         qrCodeResult = intent.getStringExtra("qrCodeResult").toString()
 
-        bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
-        bluetoothAdapter = bluetoothManager.adapter
-        bluetoothLeAdvertiser = bluetoothAdapter.bluetoothLeAdvertiser
-
-        val settings = AdvertiseSettings.Builder()
-            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-            .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
-            .setConnectable(false) // 不允許連接
+        beacon = Beacon.Builder()
+            .setId1(qrCodeResult)
+            .setId2("0") // major
+            .setId3("0") // minor
+            .setManufacturer(0x004C)
             .build()
 
-        val pUuid = ParcelUuid(UUID.fromString(qrCodeResult))
+        Log.d(TAG, "Beacon: $beacon")
 
-        Log.d(TAG, "UUID: $pUuid")
+        beaconParser = BeaconParser()
+            .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24")
 
-        val data = AdvertiseData.Builder()
-            .setIncludeDeviceName(false)
-            .setIncludeTxPowerLevel(true)
-            .addServiceUuid(pUuid)
-            .build()
+        Log.d(TAG, "Beacon Parser: $beaconParser")
 
-        Log.d(TAG, "Data: $data")
+        beaconTransmitter = BeaconTransmitter(this, beaconParser)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Log.d(TAG, "SDK Version Checking")
@@ -106,51 +87,43 @@ class BLEBeaconAdvertise : AppCompatActivity() {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.BLUETOOTH_ADVERTISE),
-                    REQUEST_BLUETOOTH_PERMISSION
+                    123
                 )
 
-                bluetoothLeAdvertiser.startAdvertising(settings, data, advertisingCallback)
-
-                Toast.makeText(this, "ble start advertising", Toast.LENGTH_SHORT).show()
+                beaconTransmitter.startAdvertising(beacon, advertisingCallback)
 
                 binding.textView.setText(R.string.beacon_advertising)
                 binding.imageView.setImageResource(R.drawable.baseline_bluetooth_audio_24)
+
+                Toast.makeText(this, "beacon start advertising", Toast.LENGTH_SHORT).show()
             }
             else {
                 Log.d(TAG, "Already Required Permission")
 
-                bluetoothLeAdvertiser.startAdvertising(settings, data, advertisingCallback)
-
-                Toast.makeText(this, "ble start advertising", Toast.LENGTH_SHORT).show()
+                beaconTransmitter.startAdvertising(beacon, advertisingCallback)
 
                 binding.textView.setText(R.string.beacon_advertising)
                 binding.imageView.setImageResource(R.drawable.baseline_bluetooth_audio_24)
+
+                Toast.makeText(this, "beacon start advertising", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.BLUETOOTH_ADVERTISE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
+        if(!beaconTransmitter.isStarted) {
+            Log.d(Companion.TAG, "iBeacon Stop Advertising")
+
+            beaconTransmitter.stopAdvertising()
+
+            Toast.makeText(this, "iBeacon stop advertising", Toast.LENGTH_SHORT).show()
         }
+    }
 
-        Log.d(TAG, "Stop Advertising")
-
-        bluetoothLeAdvertiser.stopAdvertising(advertisingCallback)
-
-        Toast.makeText(this, "ble stop advertising", Toast.LENGTH_SHORT).show()
+    companion object {
+        private const val TAG = "BeaconAdvertiseTest"
     }
 }
