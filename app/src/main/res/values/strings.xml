@@ -20,4 +20,5 @@
     <string name="entry_reason">事由</string>
     <string name="beacon_advertising">藍牙信標廣播中…</string>
     <string name="beacon_advertise_not_working">藍牙信標廣播異常</string>
+    <string name="scanning_result_not_uuid">掃描結果非UUID</string>
 </resources>

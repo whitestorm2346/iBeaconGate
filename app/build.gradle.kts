@@ -57,7 +57,7 @@ repositories {
 
 dependencies {
 
-    implementation("org.altbeacon:android-beacon-library:2.19.6")
+    implementation("org.altbeacon:android-beacon-library:2.19.3")
     implementation("com.github.yuriy-budiyev:code-scanner:2.3.2")
     implementation("com.google.android.material:material:1.1.0")
     implementation("com.journeyapps:zxing-android-embedded:4.2.0")
