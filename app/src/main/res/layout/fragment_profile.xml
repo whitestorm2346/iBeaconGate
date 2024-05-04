@@ -111,19 +111,19 @@
         android:textColorHint="#88000000"
         android:textColorLink="#FFFFFF"
         android:textColor="#000000"
-        app:layout_constraintBottom_toTopOf="@id/saveButton"
+        app:layout_constraintBottom_toTopOf="@id/storeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/entry_phone" />
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/storeButton"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="20dp"
-        android:hint="@string/save"
+        android:hint="@string/store"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

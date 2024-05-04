@@ -16,7 +16,7 @@
     <string name="profile">Profile</string>
     <string name="qrcodescanner">QR Code Scanner</string>
     <string name="setting">Setting</string>
-    <string name="save">儲存</string>
+    <string name="store">儲存</string>
     <string name="entry_reason">事由</string>
     <string name="beacon_advertising">藍牙信標廣播中…</string>
     <string name="beacon_advertise_not_working">藍牙信標廣播異常</string>

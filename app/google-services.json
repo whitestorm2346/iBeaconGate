@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "742178425283",
+    "project_id": "ibeacon-gate",
+    "storage_bucket": "ibeacon-gate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742178425283:android:9ef57791f2657b86ae9576",
+        "android_client_info": {
+          "package_name": "com.example.bluetoothgate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3XghwopoEeIbL-vHopq3_0Eqcq-FAW74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
