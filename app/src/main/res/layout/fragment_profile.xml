@@ -9,11 +9,11 @@
 
     <ImageView
         android:id="@+id/user_image"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/baseline_account_box_24"
+        android:layout_marginBottom="25dp"
+        android:src="@drawable/baseline_account_circle_24"
         app:layout_constraintBottom_toTopOf="@+id/entry_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

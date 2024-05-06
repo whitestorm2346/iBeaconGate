@@ -1,4 +1,4 @@
-package com.example.bluetoothgate
+package com.example.beacongate
 
 import android.os.Bundle
 import android.util.Log
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.bluetoothgate.databinding.FragmentProfileBinding
+import com.example.beacongate.databinding.FragmentProfileBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -25,22 +25,12 @@ class Profile : Fragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "Profile on create")
         binding = FragmentProfileBinding.inflate(layoutInflater)
-        Log.d(TAG, "Finished binding")
-
-        binding.entryName.setText("測試名")
-        binding.entryGender.setText("男")
-        binding.entryId.setText("A123456789")
-        binding.entryPhone.setText("0123456789")
-        binding.entryReason.setText("這個專案快失火了")
-
         database = FirebaseFirestore.getInstance()
-        Log.d(TAG, "Firestore Instance: $database")
+
+        initTestData()
 
         binding.storeButton.setOnClickListener {
-            Log.d(TAG, "storeButton on click")
-
             val name = binding.entryName.text.toString()
             val gender = binding.entryGender.text.toString()
             val id = binding.entryId.text.toString().uppercase()
@@ -70,6 +60,14 @@ class Profile : Fragment() {
                     Toast.makeText(requireContext(), "Failed storing the data", Toast.LENGTH_SHORT).show()
                 }
         }
+    }
+
+    private fun initTestData(){
+        binding.entryName.setText("測試名")
+        binding.entryGender.setText("男")
+        binding.entryId.setText("A123456789")
+        binding.entryPhone.setText("0123456789")
+        binding.entryReason.setText("這個專案快失火了")
     }
 
     companion object {

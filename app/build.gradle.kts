@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.bluetoothgate"
+    namespace = "com.example.beacongate"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.bluetoothgate"
+        applicationId = "com.example.beacongate"
         minSdk = 31
         targetSdk = 32
         versionCode = 1

@@ -1,4 +1,4 @@
-package com.example.bluetoothgate
+package com.example.beacongate
 
 import android.Manifest
 import android.bluetooth.le.AdvertiseCallback
@@ -11,7 +11,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.example.bluetoothgate.databinding.ActivityBleBeaconAdvertiseBinding
+import com.example.beacongate.databinding.ActivityBleBeaconAdvertiseBinding
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconParser
 import org.altbeacon.beacon.BeaconTransmitter

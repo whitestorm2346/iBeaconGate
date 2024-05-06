@@ -1,4 +1,4 @@
-package com.example.bluetoothgate
+package com.example.beacongate
 
 data class User(
     val name: String? = null,

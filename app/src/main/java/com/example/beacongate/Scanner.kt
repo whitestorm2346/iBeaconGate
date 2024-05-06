@@ -1,4 +1,4 @@
-package com.example.bluetoothgate
+package com.example.beacongate
 
 import android.Manifest
 import android.content.Intent
@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.budiyev.android.codescanner.CodeScanner
-import com.example.bluetoothgate.databinding.FragmentScannerBinding
+import com.example.beacongate.databinding.FragmentScannerBinding
 
 class Scanner : Fragment() {
     private lateinit var binding: FragmentScannerBinding

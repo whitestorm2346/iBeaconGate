@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.BluetoothGate" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.BeaconGate" parent="Theme.AppCompat.NoActionBar">
 <!--        <item name="colorPrimary">@color/primary</item>-->
 <!--        <item name="colorPrimaryDark">@color/primaryDark</item>-->
 <!--        <item name="colorAccent">@color/secondary</item>-->

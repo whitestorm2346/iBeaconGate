@@ -1,4 +1,4 @@
-package com.example.bluetoothgate.ui.theme
+package com.example.beacongate.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

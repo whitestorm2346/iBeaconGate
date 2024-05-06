@@ -1,4 +1,4 @@
-package com.example.bluetoothgate
+package com.example.beacongate
 
 import org.junit.Test
 

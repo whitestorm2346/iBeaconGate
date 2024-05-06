@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:742178425283:android:9ef57791f2657b86ae9576",
         "android_client_info": {
-          "package_name": "com.example.bluetoothgate"
+          "package_name": "com.example.beacongate"
         }
       },
       "oauth_client": [],
