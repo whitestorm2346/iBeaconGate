@@ -28,8 +28,6 @@ class Profile : Fragment() {
         binding = FragmentProfileBinding.inflate(layoutInflater)
         database = FirebaseFirestore.getInstance()
 
-        initTestData()
-
         binding.storeButton.setOnClickListener {
             val name = binding.entryName.text.toString()
             val gender = binding.entryGender.text.toString()
