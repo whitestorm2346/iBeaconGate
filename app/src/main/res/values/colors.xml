@@ -11,9 +11,9 @@
 <!--    <color name="secondaryLight">#FBEAFF</color>-->
 <!--    <color name="secondaryDark">#28115D</color>-->
 
-    <color name="navbar_background">#F1FAFF</color>
-    <color name="navbar_icon_accent">#5392FF</color>
-    <color name="navbar_icon_inactive">#A0ACBD</color>
-    <color name="navbar_text_accent">#5392FF</color>
-    <color name="navbar_text_inactive">#A0ACBD</color>
+    <color name="navbar_background">#585B5E</color>
+    <color name="navbar_icon_accent">#C2C5C6</color>
+    <color name="navbar_icon_inactive">#8C929A</color>
+    <color name="navbar_text_accent">#C2C5C6</color>
+    <color name="navbar_text_inactive">#8C929A</color>
 </resources>
