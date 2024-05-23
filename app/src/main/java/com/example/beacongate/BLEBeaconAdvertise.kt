@@ -83,27 +83,8 @@ class BLEBeaconAdvertise : AppCompatActivity() {
 
             beaconTransmitter = BeaconTransmitter(this, beaconParser)
             beaconTransmitter.isConnectable = true
+            beaconTransmitter.advertiseMode = AdvertiseSettings.ADVERTISE_MODE_LOW_POWER
             Log.d(TAG, "Beacon Transmitter: $beaconTransmitter")
-
-
-//            ### Use Android Beacon Library - AltBeacon
-//
-//            beacon = Beacon.Builder()
-//                .setId1(qrCodeResult)
-//                .setId2("0") // major
-//                .setId3("0") // minor
-//                .setManufacturer(0x0118)
-//                .setTxPower(-59)
-//                .build()
-//            Log.d(TAG, "Beacon: $beacon")
-//
-//            beaconParser = BeaconParser()
-//                .setBeaconLayout(BeaconParser.ALTBEACON_LAYOUT)
-//            Log.d(TAG, "Beacon Parser: $beaconParser")
-//
-//            beaconTransmitter = BeaconTransmitter(this, beaconParser)
-//            beaconTransmitter.isConnectable = true
-//            Log.d(TAG, "Beacon Transmitter: $beaconTransmitter")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 Log.d(TAG, "SDK Version Checking")
